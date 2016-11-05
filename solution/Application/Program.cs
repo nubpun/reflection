@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using Framework;
 namespace Application
 {
     class Program
@@ -18,10 +18,9 @@ namespace Application
                 var DLL = Assembly.LoadFile(file);
                 var Types = DLL.DefinedTypes;
                 foreach (Type type in Types)
-                {
-                    var c = Activator.CreateInstance(type);
-
-                    Console.WriteLine(type.InvokeMember("Name", BindingFlags.GetProperty, null, c, new object[] { }));
+                {                    
+                    IPlugin plagin = (IPlugin)Activator.CreateInstance(type);
+                    Console.WriteLine(plagin.Name);
                 }
             }
         }
