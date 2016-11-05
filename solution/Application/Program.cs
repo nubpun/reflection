@@ -18,7 +18,19 @@ namespace Application
                 var DLL = Assembly.LoadFile(file);
                 var Types = DLL.DefinedTypes;
                 foreach (Type type in Types)
-                {                    
+                {
+                    Type inter = type.GetInterface("IPlugin");
+                    if (inter == null)
+                    {
+                        throw new NotImplementedException("Библиотека не содержит реализации интерфейса плагина.");
+                    }
+                    
+                    ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
+                    if (constructorInfo == null)
+                    {
+                        throw new NotImplementedException("Библиотека не содержит конструктора с пустыми параметрами.");
+                    }
+
                     IPlugin plagin = (IPlugin)Activator.CreateInstance(type);
                     Console.WriteLine(plagin.Name);
                 }
